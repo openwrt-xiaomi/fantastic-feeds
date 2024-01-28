@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fantastic-feeds
-PKG_VERSION:=1
+PKG_VERSION:=2
 PKG_RELEASE:=0
 
 PKG_MAINTAINER:=remittor <remittor@gmail.com>
@@ -39,15 +39,26 @@ define Package/$(PKG_NAME)/postinst
 FW_VER_FN="/etc/openwrt_release"
 [ ! -f $$FW_VER_FN ] && { echo "File '/etc/openwrt_release' not found!"; exit 1; }
 FW_VERSION=$$( grep -o "^DISTRIB_RELEASE='.*" $$FW_VER_FN | cut -d"'" -f2 )
-FW_VER_MAJOR=$$( echo "$$FW_VERSION" | cut -d. -f1 )
-FW_VER_MINOR=$$( echo "$$FW_VERSION" | cut -d. -f2 )
+if [ "$$FW_VERSION" = "SNAPSHOT" ]; then
+	FW_REV=$$( grep -o "^DISTRIB_REVISION='.*" $$FW_VER_FN | cut -d"'" -f2 )
+	FW_BRANCH=$${FW_REV:0:3}
+	FANPKG_BRANCH="23.05"
+	[ "$$FW_BRANCH" = "r21" ] && FANPKG_BRANCH="21.02"
+	[ "$$FW_BRANCH" = "r22" ] && FANPKG_BRANCH="22.02"
+	[ "$$FW_BRANCH" = "r23" ] && FANPKG_BRANCH="23.05"
+	[ "$$FW_BRANCH" = "r24" ] && FANPKG_BRANCH="23.05"
+else
+	FW_VER_MAJOR=$$( echo "$$FW_VERSION" | cut -d. -f1 )
+	FW_VER_MINOR=$$( echo "$$FW_VERSION" | cut -d. -f2 )
+	FANPKG_BRANCH="$$FW_VER_MAJOR.$$FW_VER_MINOR"
+fi
 FW_ARCH=$$( grep -o "^DISTRIB_ARCH='.*" $$FW_VER_FN | cut -d"'" -f2 )
 if [ ! -f /etc/opkg/customfeeds.conf ]; then
 	echo "" > /etc/opkg/customfeeds.conf
 fi
 if [ $$( grep -c -F fantastic_packages_ /etc/opkg/customfeeds.conf ) = 0 ]; then
 	BASE_URL="https://fantastic-packages.github.io/packages/releases"
-	BASE_URL="$$BASE_URL/$$FW_VER_MAJOR.$$FW_VER_MINOR/packages/$$FW_ARCH"
+	BASE_URL="$$BASE_URL/$$FANPKG_BRANCH/packages/$$FW_ARCH"
 	echo "" >> /etc/opkg/customfeeds.conf
 	echo "src/gz  fantastic_packages_luci      $$BASE_URL/luci"     >> /etc/opkg/customfeeds.conf
 	echo "src/gz  fantastic_packages_packages  $$BASE_URL/packages" >> /etc/opkg/customfeeds.conf
