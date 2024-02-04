@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fantastic-feeds
-PKG_VERSION:=2
-PKG_RELEASE:=0
+PKG_VERSION:=2.1
+PKG_RELEASE:=2024-02-04
 
 PKG_MAINTAINER:=remittor <remittor@gmail.com>
 PKG_LICENSE:=MIT
@@ -48,8 +48,9 @@ if [ "$$FW_VERSION" = "SNAPSHOT" ]; then
 	[ "$$FW_BRANCH" = "r23" ] && FANPKG_BRANCH="23.05"
 	[ "$$FW_BRANCH" = "r24" ] && FANPKG_BRANCH="23.05"
 else
-	FW_VER_MAJOR=$$( echo "$$FW_VERSION" | cut -d. -f1 )
-	FW_VER_MINOR=$$( echo "$$FW_VERSION" | cut -d. -f2 )
+	FW_VER=$$( echo "$$FW_VERSION" | cut -d"-" -f1 )
+    FW_VER_MAJOR=$$( echo "$$FW_VER" | cut -d. -f1 )
+	FW_VER_MINOR=$$( echo "$$FW_VER" | cut -d. -f2 )
 	FANPKG_BRANCH="$$FW_VER_MAJOR.$$FW_VER_MINOR"
 fi
 FW_ARCH=$$( grep -o "^DISTRIB_ARCH='.*" $$FW_VER_FN | cut -d"'" -f2 )
