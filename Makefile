@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fantastic-feeds
-PKG_VERSION:=2.1
-PKG_RELEASE:=2024-02-04
+PKG_VERSION:=2.2
+PKG_RELEASE:=2024-02-11
 
 PKG_MAINTAINER:=remittor <remittor@gmail.com>
 PKG_LICENSE:=MIT
@@ -40,16 +40,18 @@ FW_VER_FN="/etc/openwrt_release"
 [ ! -f $$FW_VER_FN ] && { echo "File '/etc/openwrt_release' not found!"; exit 1; }
 FW_VERSION=$$( grep -o "^DISTRIB_RELEASE='.*" $$FW_VER_FN | cut -d"'" -f2 )
 if [ "$$FW_VERSION" = "SNAPSHOT" ]; then
-	FW_REV=$$( grep -o "^DISTRIB_REVISION='.*" $$FW_VER_FN | cut -d"'" -f2 )
-	FW_BRANCH=$${FW_REV:0:3}
+	FW_REV=$$( grep -o "^DISTRIB_REVISION='.*" $$FW_VER_FN | cut -d"'" -f2 | cut -d"-" -f1 )
+	FW_BRANCH=$${FW_REV:1:5}
+	# r10860-a3ffeb413b   19.07.0
+	# r16122-c2139eef27   21.02-rc1
+	# r19302-df622768da   22.03-rc1
+	# r23069-e2701e0f33   23.05-rc1
 	FANPKG_BRANCH="23.05"
-	[ "$$FW_BRANCH" = "r21" ] && FANPKG_BRANCH="21.02"
-	[ "$$FW_BRANCH" = "r22" ] && FANPKG_BRANCH="22.02"
-	[ "$$FW_BRANCH" = "r23" ] && FANPKG_BRANCH="23.05"
-	[ "$$FW_BRANCH" = "r24" ] && FANPKG_BRANCH="23.05"
+	[ "$$FW_BRANCH" -lt 23069 ] && FANPKG_BRANCH="22.03"
+	[ "$$FW_BRANCH" -lt 19302 ] && FANPKG_BRANCH="21.02"
 else
 	FW_VER=$$( echo "$$FW_VERSION" | cut -d"-" -f1 )
-    FW_VER_MAJOR=$$( echo "$$FW_VER" | cut -d. -f1 )
+	FW_VER_MAJOR=$$( echo "$$FW_VER" | cut -d. -f1 )
 	FW_VER_MINOR=$$( echo "$$FW_VER" | cut -d. -f2 )
 	FANPKG_BRANCH="$$FW_VER_MAJOR.$$FW_VER_MINOR"
 fi
