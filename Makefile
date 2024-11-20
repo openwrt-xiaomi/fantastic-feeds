@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fantastic-feeds
 PKG_VERSION:=2.3
-PKG_RELEASE:=2024-11-20
+PKG_RELEASE:=20241120
 
 PKG_MAINTAINER:=remittor <remittor@gmail.com>
 PKG_LICENSE:=MIT
