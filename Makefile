@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fantastic-feeds
-PKG_VERSION:=2.2
-PKG_RELEASE:=2024-02-11
+PKG_VERSION:=2.3
+PKG_RELEASE:=2024-11-20
 
 PKG_MAINTAINER:=remittor <remittor@gmail.com>
 PKG_LICENSE:=MIT
@@ -46,7 +46,9 @@ if [ "$$FW_VERSION" = "SNAPSHOT" ]; then
 	# r16122-c2139eef27   21.02-rc1
 	# r19302-df622768da   22.03-rc1
 	# r23069-e2701e0f33   23.05-rc1
-	FANPKG_BRANCH="23.05"
+	# r32308-9da8dfc1b9   24.10-snapshot
+	FANPKG_BRANCH="24.10"
+	[ "$$FW_BRANCH" -lt 32308 ] && FANPKG_BRANCH="23.05"
 	[ "$$FW_BRANCH" -lt 23069 ] && FANPKG_BRANCH="22.03"
 	[ "$$FW_BRANCH" -lt 19302 ] && FANPKG_BRANCH="21.02"
 else
