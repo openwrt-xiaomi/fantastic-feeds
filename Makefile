@@ -67,6 +67,7 @@ if [ $$( grep -c -F fantastic_packages_ /etc/opkg/customfeeds.conf ) = 0 ]; then
 	echo "" >> /etc/opkg/customfeeds.conf
 	echo "src/gz  fantastic_packages_luci      $$BASE_URL/luci"     >> /etc/opkg/customfeeds.conf
 	echo "src/gz  fantastic_packages_packages  $$BASE_URL/packages" >> /etc/opkg/customfeeds.conf
+	echo "src/gz  fantastic_packages_special   $$BASE_URL/special"  >> /etc/opkg/customfeeds.conf
 fi
 exit 0
 endef
