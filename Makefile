@@ -29,7 +29,7 @@ endef
 
 define Package/$(PKG_NAME)/install
 	$(INSTALL_DIR) $(1)/etc/opkg/keys
-	$(INSTALL_DATA) ./key.pub $(1)/etc/opkg/keys/53ff2b6672243d28
+	$(INSTALL_DATA) ./53ff2b6672243d28.pub $(1)/etc/opkg/keys/53ff2b6672243d28
 endef
 
 define Package/$(PKG_NAME)/postinst
